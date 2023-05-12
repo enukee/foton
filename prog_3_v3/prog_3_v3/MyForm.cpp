@@ -4,13 +4,14 @@
 using namespace prog3v3;
 using namespace System::Runtime::InteropServices;
 
-boolean is_bmp_file(char* way) {
-	int last_symbol = strlen(way) - 1;
-	boolean is_bmp = (way[last_symbol] == 'p');
-	is_bmp &= (way[last_symbol - 1] == 'm');
-	is_bmp &= (way[last_symbol - 2] == 'b');
-	is_bmp &= (way[last_symbol - 3] == '.');
-	return is_bmp;
+void checking_the_value(System::Object^ sender, int max) {
+	int value = Int32::Parse((safe_cast<TextBox^>(sender))->Text);
+	if (value < 0) {
+		(safe_cast<TextBox^>(sender))->Text = "0";
+	}
+	if (value >= max) {
+		(safe_cast<TextBox^>(sender))->Text = System::Convert::ToString(max);
+	}
 }
 
 // Открытие bmp файла 1
@@ -19,7 +20,7 @@ System::Void MyForm::button_open_file_1_Click(System::Object^ sender, System::Ev
 	this->textBox1->Text = this->openFileDialog1->FileName;
 	way_1 = (char*)(void*)Marshal::StringToHGlobalAnsi(this->openFileDialog1->FileName);
 	if (is_bmp_file(way_1)) {
-		this->pictureBox1->ImageLocation = this->openFileDialog1->FileName;
+		this->pictureBox1->Image = gcnew Bitmap(this->openFileDialog1->FileName);
 		image_1 = Image::FromFile(this->openFileDialog1->FileName);
 		bitmap_1 = gcnew Bitmap(image_1);
 	}
@@ -35,8 +36,7 @@ System::Void MyForm::button_open_file_2_Click(System::Object^ sender, System::Ev
 	this->textBox2->Text = this->openFileDialog2->FileName;
 	way_2 = (char*)(void*)Marshal::StringToHGlobalAnsi(this->openFileDialog2->FileName); 
 	if (is_bmp_file(way_2)) {
-		this->pictureBox2->ImageLocation = this->openFileDialog2->FileName;
-		this->pictureBox2->Image = gcnew Bitmap(this->pictureBox2->ImageLocation);
+		this->pictureBox2->Image = gcnew Bitmap(this->openFileDialog2->FileName);
 		w_2 = this->pictureBox2->Image->Width;
 		h_2 = this->pictureBox2->Image->Height;
 		this->textBox_w_2->Text = System::Convert::ToString(w_2);
@@ -47,86 +47,41 @@ System::Void MyForm::button_open_file_2_Click(System::Object^ sender, System::Ev
 	}
 }
 
-// Ввод координаты x для изображения 1
-System::Void MyForm::textBox_x_1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	string str;
+System::Void MyForm::textBox_x_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 	try {
-		x_1 = Int32::Parse(this->textBox_x_1->Text);
+		checking_the_value(sender, this->pictureBox1->Image->Width);
 	}
-	catch (FormatException^) {
-		this->messageBox_error->Show("Недопустимый символ", "Ошибка");
+	catch (...) {
+		this->messageBox_error->Show("Откройте файл", "Ошибка");
 	}
 }
 
-// Ввод координаты y для изображения 1
-System::Void MyForm::textBox_y_1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	try {
-		y_1 = Int32::Parse(this->textBox_y_1->Text);
-	}
-	catch (FormatException^) {
-		this->messageBox_error->Show("Недопустимый символ", "Ошибка");
-	}
-
+System::Void MyForm::textBox_y_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
+	checking_the_value(sender, this->pictureBox1->Image->Height);
 }
 
-// Ввод ширины для изображения 1
-System::Void MyForm::textBox_w_1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	try {
-		w_1 = Int32::Parse(this->textBox_w_1->Text);
-	}
-	catch (FormatException^) {
-		this->messageBox_error->Show("Недопустимый символ", "Ошибка");
-	}
+System::Void MyForm::textBox_w_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
+	checking_the_value(sender, this->pictureBox1->Image->Width - Int32::Parse(this->textBox_x_1->Text));
 }
 
-// Ввод высоты для изображения 1
-System::Void MyForm::textBox_h_1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	try {
-		h_1 = Int32::Parse(this->textBox_h_1->Text);
-	}
-	catch (FormatException^) {
-		this->messageBox_error->Show("Недопустимый символ","Ошибка");
-	}
+System::Void MyForm::textBox_h_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
+	checking_the_value(sender, this->pictureBox1->Image->Height - Int32::Parse(this->textBox_y_1->Text));
 }
 
-// Ввод координаты x для изображения 2
-System::Void MyForm::textBox_x_2_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	try {
-		x_2 = Int32::Parse(this->textBox_w_2->Text);
-	}
-	catch (FormatException^) {
-		this->messageBox_error->Show("Недопустимый символ", "Ошибка");
-	}
+System::Void MyForm::textBox_x_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
+	checking_the_value(sender, this->pictureBox2->Image->Width);
 }
 
-// Ввод координаты y для изображения 2
-System::Void MyForm::textBox_y_2_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	try {
-		y_2 = Int32::Parse(this->textBox_w_2->Text);
-	}
-	catch (FormatException^) {
-		this->messageBox_error->Show("Недопустимый символ", "Ошибка");
-	}
+System::Void MyForm::textBox_y_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
+	checking_the_value(sender, this->pictureBox2->Image->Height);
 }
 
-// Ввод ширины для изображения 2
-System::Void MyForm::textBox_w_2_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	try {
-		w_2 = Int32::Parse(this->textBox_w_2->Text);
-	}
-	catch (FormatException^) {
-		this->messageBox_error->Show("Недопустимый символ", "Ошибка");
-	}
+System::Void MyForm::textBox_w_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
+	checking_the_value(sender, this->pictureBox2->Image->Width - Int32::Parse(this->textBox_x_2->Text));
 }
 
-// Ввод высоты для изображения 2
-System::Void MyForm::textBox_h_2_TextChanged(System::Object^ sender, System::EventArgs^ e){
-	try {
-		h_2 = Int32::Parse(this->textBox_h_2->Text);
-	}
-	catch (FormatException^) {
-		this->messageBox_error->Show("Недопустимый символ", "Ошибка");
-	}
+System::Void MyForm::textBox_h_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
+	checking_the_value(sender, this->pictureBox2->Image->Height - Int32::Parse(this->textBox_y_2->Text));
 }
 
 System::Void MyForm::pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
@@ -140,8 +95,6 @@ System::Void MyForm::pictureBox1_MouseDown(System::Object^ sender, System::Windo
 
 	bitmap_1 = gcnew Bitmap(image_1);
 }
-
-
 
 System::Void MyForm::pictureBox1_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 	if (e->Button == System::Windows::Forms::MouseButtons::Left) {
@@ -159,7 +112,6 @@ System::Void MyForm::pictureBox1_MouseMove(System::Object^ sender, System::Windo
 		}
 
 		Graphics^ g = Graphics::FromImage(bitmap_1);
-		//g = this->pictureBox1->CreateGraphics();
 		Pen^ pp = gcnew Pen(Brushes::Red, 2);
 		g->DrawRectangle(pp, x_1_other, y_1_other, w_1, h_1);
 		g->DrawImage(bitmap_1, 0, 0);
@@ -190,14 +142,11 @@ System::Void MyForm::pictureBox1_MouseUp(System::Object^ sender, System::Windows
 	this->textBox_h_1->Text = System::Convert::ToString(h_1);
 
 	Graphics^ g = Graphics::FromImage(bitmap_1);
-	//g = this->pictureBox1->CreateGraphics();
 	Pen^ pp = gcnew Pen(Brushes::Red, 2);
 	g->DrawRectangle(pp, x_1_other, y_1_other, w_1, h_1);
 	g->DrawImage(bitmap_1, 0, 0);
 	this->pictureBox1->Image = bitmap_1;
 	this->pictureBox1->Refresh();
-	
-
 }
 
 System::Void MyForm::button_processing_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -231,7 +180,10 @@ System::Void MyForm::button_processing_Click(System::Object^ sender, System::Eve
 		this->textBox3->Text = brightness_correction(&img_1, &img_2, coord_img_1, coord_img_2, this);
 		this->progressBar1->Value = 80;
 
+		
 		combining(&img_1, &img_2, coord_img_1, coord_img_2, this);
+
+		
 		this->progressBar1->Value = 100;
 	}
 	else {

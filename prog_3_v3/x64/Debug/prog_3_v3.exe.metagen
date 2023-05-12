@@ -21,3 +21,4 @@ Class prog3v3.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     setProgressBarValue(Int32): PrivateScope, Public, HideBySig
     increasingProgressBarValue(Int32): PrivateScope, Public, HideBySig
     getProgressBarValue(): PrivateScope, Public, HideBySig
+    setImage(Bitmap): PrivateScope, Public, HideBySig

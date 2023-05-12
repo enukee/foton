@@ -2,6 +2,18 @@
 #include "BmpFile.h"
 #include "correlation.h"
 
+using namespace System::Drawing;
+
+// проверка
+boolean is_bmp_file(char* way) {
+	int last_symbol = strlen(way) - 1;
+	boolean is_bmp = (way[last_symbol] == 'p');
+	is_bmp &= (way[last_symbol - 1] == 'm');
+	is_bmp &= (way[last_symbol - 2] == 'b');
+	is_bmp &= (way[last_symbol - 3] == '.');
+	return is_bmp;
+}
+
 // метод поиска пересечения 2х изображений (поиск img_2 в img_1)
 boolean finding_intersection(BmpFile* img_1, BmpFile* img_2, coordinates* coord_img_1, coordinates* coord_img_2, prog3v3::MyForm^ mb) {
 	// Создаём матрицу части изображения img_1
@@ -112,8 +124,21 @@ void combining(BmpFile* img_1, BmpFile* img_2, coordinates coord_img_1, coordina
 	Bitmap.recording(img_1, coord_general_image_1.y, coord_general_image_1.x);
 	mb->increasingProgressBarValue(6);
 
-	BmpFile img(&Bitmap);
-	img.bmp_writer((char*)"D:\\GitHub_rep\\foton_prog\\pro_3_v2\\image\\п_4\\1&2.bmp");
+	System::Drawing::Bitmap^ img = gcnew System::Drawing::Bitmap(Bitmap.get_width(), Bitmap.get_height());
+
+	Pixel<BYTE> pixel;
+	//Color redColor = Color::FromArgb(255, 0, 0);
+	for (int i = 0; i < Bitmap.get_height(); ++i) {
+		for (int j = 0; j < Bitmap.get_width(); ++j) {
+			pixel = Bitmap.get_pixel(i, j);
+			img->SetPixel(j, i, Color::FromArgb(pixel.canal_R, pixel.canal_G, pixel.canal_B));
+		}
+	}
+
+	mb->setImage(img);
+
+	BmpFile img_o(&Bitmap);
+	img_o.bmp_writer((char*)"D:\\GitHub_rep\\foton\\pro_3_v2\\image\\п_4\\1&2.bmp");
 	mb->increasingProgressBarValue(8);
 }
 

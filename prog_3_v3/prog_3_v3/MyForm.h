@@ -75,6 +75,7 @@ namespace prog3v3 {
 	private: System::Windows::Forms::Panel^ panel2;
 	private: System::ComponentModel::BackgroundWorker^ backgroundWorker1;
 	private: System::Windows::Forms::ProgressBar^ progressBar1;
+	private: System::Windows::Forms::PictureBox^ pictureBox3;
 
 
 
@@ -163,6 +164,7 @@ namespace prog3v3 {
 			this->tabPage4 = (gcnew System::Windows::Forms::TabPage());
 			this->openFileDialog2 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->backgroundWorker1 = (gcnew System::ComponentModel::BackgroundWorker());
+			this->pictureBox3 = (gcnew System::Windows::Forms::PictureBox());
 			this->tabControl1->SuspendLayout();
 			this->tabPage1->SuspendLayout();
 			this->panel1->SuspendLayout();
@@ -171,6 +173,8 @@ namespace prog3v3 {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->tabPage3->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
+			this->tabPage4->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// openFileDialog1
@@ -324,7 +328,7 @@ namespace prog3v3 {
 			this->textBox_x_1->Size = System::Drawing::Size(84, 22);
 			this->textBox_x_1->TabIndex = 5;
 			this->textBox_x_1->Text = L"367";
-			this->textBox_x_1->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox_x_1_TextChanged);
+			this->textBox_x_1->Validating += gcnew System::ComponentModel::CancelEventHandler(this, &MyForm::textBox_x_1_Validating);
 			// 
 			// textBox_y_1
 			// 
@@ -333,7 +337,7 @@ namespace prog3v3 {
 			this->textBox_y_1->Size = System::Drawing::Size(84, 22);
 			this->textBox_y_1->TabIndex = 6;
 			this->textBox_y_1->Text = L"241";
-			this->textBox_y_1->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox_y_1_TextChanged);
+			this->textBox_y_1->Validating += gcnew System::ComponentModel::CancelEventHandler(this, &MyForm::textBox_y_1_Validating);
 			// 
 			// textBox_w_1
 			// 
@@ -342,7 +346,7 @@ namespace prog3v3 {
 			this->textBox_w_1->Size = System::Drawing::Size(84, 22);
 			this->textBox_w_1->TabIndex = 7;
 			this->textBox_w_1->Text = L"118";
-			this->textBox_w_1->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox_w_1_TextChanged);
+			this->textBox_w_1->Validating += gcnew System::ComponentModel::CancelEventHandler(this, &MyForm::textBox_w_1_Validating);
 			// 
 			// textBox_h_1
 			// 
@@ -351,7 +355,7 @@ namespace prog3v3 {
 			this->textBox_h_1->Size = System::Drawing::Size(84, 22);
 			this->textBox_h_1->TabIndex = 8;
 			this->textBox_h_1->Text = L"62";
-			this->textBox_h_1->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox_h_1_TextChanged);
+			this->textBox_h_1->Validating += gcnew System::ComponentModel::CancelEventHandler(this, &MyForm::textBox_h_1_Validating);
 			// 
 			// label_y
 			// 
@@ -413,7 +417,7 @@ namespace prog3v3 {
 			this->textBox_x_2->Size = System::Drawing::Size(84, 22);
 			this->textBox_x_2->TabIndex = 14;
 			this->textBox_x_2->Text = L"0";
-			this->textBox_x_2->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox_x_2_TextChanged);
+			this->textBox_x_2->Validating += gcnew System::ComponentModel::CancelEventHandler(this, &MyForm::textBox_x_2_Validating);
 			// 
 			// label1
 			// 
@@ -431,7 +435,7 @@ namespace prog3v3 {
 			this->textBox_y_2->Size = System::Drawing::Size(84, 22);
 			this->textBox_y_2->TabIndex = 15;
 			this->textBox_y_2->Text = L"0";
-			this->textBox_y_2->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox_y_2_TextChanged);
+			this->textBox_y_2->Validating += gcnew System::ComponentModel::CancelEventHandler(this, &MyForm::textBox_y_2_Validating);
 			// 
 			// label2
 			// 
@@ -449,7 +453,7 @@ namespace prog3v3 {
 			this->textBox_w_2->Size = System::Drawing::Size(84, 22);
 			this->textBox_w_2->TabIndex = 16;
 			this->textBox_w_2->Text = L"0";
-			this->textBox_w_2->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox_w_2_TextChanged);
+			this->textBox_w_2->Validating += gcnew System::ComponentModel::CancelEventHandler(this, &MyForm::textBox_w_2_Validating);
 			// 
 			// label3
 			// 
@@ -467,7 +471,7 @@ namespace prog3v3 {
 			this->textBox_h_2->Size = System::Drawing::Size(84, 22);
 			this->textBox_h_2->TabIndex = 17;
 			this->textBox_h_2->Text = L"0";
-			this->textBox_h_2->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox_h_2_TextChanged);
+			this->textBox_h_2->Validating += gcnew System::ComponentModel::CancelEventHandler(this, &MyForm::textBox_h_2_Validating);
 			// 
 			// tabPage2
 			// 
@@ -512,6 +516,7 @@ namespace prog3v3 {
 			// 
 			// tabPage4
 			// 
+			this->tabPage4->Controls->Add(this->pictureBox3);
 			this->tabPage4->Location = System::Drawing::Point(4, 25);
 			this->tabPage4->Name = L"tabPage4";
 			this->tabPage4->Size = System::Drawing::Size(1118, 569);
@@ -522,6 +527,14 @@ namespace prog3v3 {
 			// openFileDialog2
 			// 
 			this->openFileDialog2->FileName = L"D:\\GitHub_rep\\foton_prog\\pro_3_v2\\image\\ï_3\\file_2.bmp";
+			// 
+			// pictureBox3
+			// 
+			this->pictureBox3->Location = System::Drawing::Point(0, 0);
+			this->pictureBox3->Name = L"pictureBox3";
+			this->pictureBox3->Size = System::Drawing::Size(1118, 569);
+			this->pictureBox3->TabIndex = 3;
+			this->pictureBox3->TabStop = false;
 			// 
 			// MyForm
 			// 
@@ -542,6 +555,8 @@ namespace prog3v3 {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			this->tabPage3->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->EndInit();
+			this->tabPage4->ResumeLayout(false);
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->EndInit();
 			this->ResumeLayout(false);
 
 		}
@@ -551,19 +566,18 @@ namespace prog3v3 {
 	private: System::Void button_open_file_1_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button_open_file_2_Click(System::Object^ sender, System::EventArgs^ e);
 
-	private: System::Void textBox_x_1_TextChanged(System::Object^ sender, System::EventArgs^ e);
-	private: System::Void textBox_y_1_TextChanged(System::Object^ sender, System::EventArgs^ e);
-	private: System::Void textBox_w_1_TextChanged(System::Object^ sender, System::EventArgs^ e);
-	private: System::Void textBox_h_1_TextChanged(System::Object^ sender, System::EventArgs^ e);
-
 	private: System::Void pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 	private: System::Void pictureBox1_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 	private: System::Void pictureBox1_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
 
-	private: System::Void textBox_x_2_TextChanged(System::Object^ sender, System::EventArgs^ e);
-	private: System::Void textBox_y_2_TextChanged(System::Object^ sender, System::EventArgs^ e);
-	private: System::Void textBox_w_2_TextChanged(System::Object^ sender, System::EventArgs^ e);
-	private: System::Void textBox_h_2_TextChanged(System::Object^ sender, System::EventArgs^ e);
+	private: System::Void textBox_x_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
+	private: System::Void textBox_y_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
+	private: System::Void textBox_w_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
+	private: System::Void textBox_h_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
+	private: System::Void textBox_x_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
+	private: System::Void textBox_y_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
+	private: System::Void textBox_w_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
+	private: System::Void textBox_h_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
 
 	public: void setProgressBarValue(int value) {
 		this->progressBar1->Value = value;
@@ -575,6 +589,11 @@ namespace prog3v3 {
 
 	public: int getProgressBarValue() {
 		return this->progressBar1->Value ;
+	}
+
+	public: void setImage(Drawing::Bitmap^ bitmap) {
+		this->pictureBox3->Image = bitmap;
+		this->pictureBox3->Refresh();
 	}
 };
 }

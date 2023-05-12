@@ -2,3 +2,7 @@ D:\GitHub_rep\foton_prog\prog_3_v3\prog_3_v3\x64\Debug\prog_3_v3.vcxproj.Assembl
 D:\GitHub_rep\foton_prog\prog_3_v3\prog_3_v3\x64\Debug\prog_3_v3.vcxproj.SuggestedBindingRedirects.cache
 D:\GitHub_rep\foton_prog\prog_3_v3\prog_3_v3\x64\Debug\prog3v3.MyForm.resources
 D:\GitHub_rep\foton_prog\prog_3_v3\prog_3_v3\x64\Debug\prog_3_v3.vcxproj.GenerateResource.cache
+D:\GitHub_rep\foton\prog_3_v3\prog_3_v3\x64\Debug\prog_3_v3.vcxproj.AssemblyReference.cache
+D:\GitHub_rep\foton\prog_3_v3\prog_3_v3\x64\Debug\prog_3_v3.vcxproj.SuggestedBindingRedirects.cache
+D:\GitHub_rep\foton\prog_3_v3\prog_3_v3\x64\Debug\prog3v3.MyForm.resources
+D:\GitHub_rep\foton\prog_3_v3\prog_3_v3\x64\Debug\prog_3_v3.vcxproj.GenerateResource.cache
