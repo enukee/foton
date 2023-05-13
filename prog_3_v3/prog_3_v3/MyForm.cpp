@@ -32,11 +32,11 @@ System::Void MyForm::button_open_file_1_Click(System::Object^ sender, System::Ev
 
 // Открытие bmp файла 2
 System::Void MyForm::button_open_file_2_Click(System::Object^ sender, System::EventArgs^ e) {
-	this->openFileDialog2->ShowDialog(); 
-	this->textBox2->Text = this->openFileDialog2->FileName;
-	way_2 = (char*)(void*)Marshal::StringToHGlobalAnsi(this->openFileDialog2->FileName); 
+	this->openFileDialog1->ShowDialog(); 
+	this->textBox2->Text = this->openFileDialog1->FileName;
+	way_2 = (char*)(void*)Marshal::StringToHGlobalAnsi(this->openFileDialog1->FileName); 
 	if (is_bmp_file(way_2)) {
-		this->pictureBox2->Image = gcnew Bitmap(this->openFileDialog2->FileName);
+		this->pictureBox2->Image = gcnew Bitmap(this->openFileDialog1->FileName);
 		w_2 = this->pictureBox2->Image->Width;
 		h_2 = this->pictureBox2->Image->Height;
 		this->textBox_w_2->Text = System::Convert::ToString(w_2);
@@ -54,34 +54,42 @@ System::Void MyForm::textBox_x_1_Validating(System::Object^ sender, System::Comp
 	catch (...) {
 		this->messageBox_error->Show("Откройте файл", "Ошибка");
 	}
+	x_1 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::textBox_y_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 	checking_the_value(sender, this->pictureBox1->Image->Height);
+	y_1 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::textBox_w_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 	checking_the_value(sender, this->pictureBox1->Image->Width - Int32::Parse(this->textBox_x_1->Text));
+	w_1 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::textBox_h_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 	checking_the_value(sender, this->pictureBox1->Image->Height - Int32::Parse(this->textBox_y_1->Text));
+	h_1 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::textBox_x_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 	checking_the_value(sender, this->pictureBox2->Image->Width);
+	x_2 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::textBox_y_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 	checking_the_value(sender, this->pictureBox2->Image->Height);
+	y_2 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::textBox_w_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 	checking_the_value(sender, this->pictureBox2->Image->Width - Int32::Parse(this->textBox_x_2->Text));
+	w_2 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::textBox_h_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 	checking_the_value(sender, this->pictureBox2->Image->Height - Int32::Parse(this->textBox_y_2->Text));
+	h_2 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
@@ -150,13 +158,17 @@ System::Void MyForm::pictureBox1_MouseUp(System::Object^ sender, System::Windows
 }
 
 System::Void MyForm::button_processing_Click(System::Object^ sender, System::EventArgs^ e) {
+	if (this->backgroundWorker1->IsBusy != true) {
+		this->backgroundWorker1->RunWorkerAsync();
+	}
+}
 
-	this->progressBar1->Value = 0;
+System::Void MyForm::backgroundWorker1_DoWork(System::Object^ sender, System::ComponentModel::DoWorkEventArgs^ e) {
+
+	this->set_value(0);
 
 	BmpFile img_1(way_1, this);
-	this->progressBar1->Value = 20;
 	BmpFile img_2(way_2, this);
-	this->progressBar1->Value = 40;
 
 	coordinates coord_img_1;
 
@@ -172,21 +184,27 @@ System::Void MyForm::button_processing_Click(System::Object^ sender, System::Eve
 	coord_img_2.height = Int32::Parse(this->textBox_h_2->Text);
 
 	boolean is_found = finding_intersection(&img_1, &img_2, &coord_img_1, &coord_img_2, this);
-	this->progressBar1->Value = 60;
 	coord_img_2.height = coord_img_1.height;
 	coord_img_2.width = coord_img_1.width;
 
 	if (is_found){
-		this->textBox3->Text = brightness_correction(&img_1, &img_2, coord_img_1, coord_img_2, this);
-		this->progressBar1->Value = 80;
-
+		System::String^ data = brightness_correction(&img_1, &img_2, coord_img_1, coord_img_2, this);
+		this->textBox3->Invoke(gcnew Action<System::String^>(this, &MyForm::dataUpdate), data);
 		
-		combining(&img_1, &img_2, coord_img_1, coord_img_2, this);
+		System::Drawing::Bitmap^  img = combining(&img_1, &img_2, coord_img_1, coord_img_2, this);
+		this->pictureBox3->Invoke(gcnew Action<System::Drawing::Bitmap^>(this, &MyForm::setImage), img);
 
-		
-		this->progressBar1->Value = 100;
+		this->set_value(100);
 	}
 	else {
 		this->messageBox_error->Show("Пересечение не найдено", "Ошибка");
 	}
+}
+
+System::Void MyForm::set_value(int value) {
+	this->progressBar1->Invoke(gcnew Action<int>(this, &MyForm::setProgressBarValue), value);
+}
+
+System::Void MyForm::increasing_value(int value) {
+	this->progressBar1->Invoke(gcnew Action<int>(this, &MyForm::increasingProgressBarValue), value);
 }

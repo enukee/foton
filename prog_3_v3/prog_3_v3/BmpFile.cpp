@@ -3,7 +3,7 @@
 using namespace std;
 #define ALING4(x) ((((x)-1)/4+1)*4) //Макрос - дополнение величины до ближайшей кратной 4
 
-BmpFile::BmpFile(char* way, prog3v3::MyForm^ mb) : ImageMatrix() {
+BmpFile::BmpFile(char* way, prog3v3::MyForm^ form) : ImageMatrix() {
 	hFile = _lopen(way, OF_READ);
 	if (hFile != HFILE_ERROR) //Если файл открылся нормально
 	{
@@ -13,7 +13,7 @@ BmpFile::BmpFile(char* way, prog3v3::MyForm^ mb) : ImageMatrix() {
 		img_Height = Head.biHeight;
 		img_Width = Head.biWidth; 
 
-		double value_progressbar = mb->getProgressBarValue();
+		double value_progressbar = form->getProgressBarValue();
 		double step = (double)20 / (double)img_Height;
 
 		matrix = new Pixel<BYTE> *[img_Height];
@@ -27,7 +27,7 @@ BmpFile::BmpFile(char* way, prog3v3::MyForm^ mb) : ImageMatrix() {
 		for (int i = img_Height - 1; i >= 0; i--) {
 			_lread(hFile, (char*)srok, img_Width * 3);
 			value_progressbar += step;
-			mb->setProgressBarValue((int)round(value_progressbar));
+			form->set_value((int)round(value_progressbar));
 
 			bmp_into_pixel_matrix(i, srok);
 

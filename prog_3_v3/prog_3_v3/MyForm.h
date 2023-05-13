@@ -32,42 +32,40 @@ namespace prog3v3 {
 	private: Image^ image_1;
 	private: Bitmap^ bitmap_1;
 
+	private: System::Windows::Forms::TabPage^ tabPage1;
 	private: System::Windows::Forms::TabPage^ tabPage3;
 	private: System::Windows::Forms::TabPage^ tabPage4;
 
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
 	private: System::Windows::Forms::PictureBox^ pictureBox2;
-	private: System::Windows::Forms::TabPage^ tabPage1;
+	private: System::Windows::Forms::PictureBox^ pictureBox3;
+	
 	private: System::Windows::Forms::TextBox^ textBox3;
 	private: System::Windows::Forms::Label^ label_h;
 	private: System::Windows::Forms::Label^ label_w;
 	private: System::Windows::Forms::Label^ label_y;
 	private: System::Windows::Forms::Label^ label_x;
-	private: System::Windows::Forms::TextBox^ textBox_h_1;
-
-	private: System::Windows::Forms::TextBox^ textBox_w_1;
-	private: System::Windows::Forms::TextBox^ textBox_y_1;
-
 
 	private: System::Windows::Forms::TextBox^ textBox_x_1;
+	private: System::Windows::Forms::TextBox^ textBox_y_1;
+	private: System::Windows::Forms::TextBox^ textBox_w_1;
+	private: System::Windows::Forms::TextBox^ textBox_h_1;
 
 	private: System::Windows::Forms::TextBox^ textBox1;
 	private: System::Windows::Forms::Button^ button_processing;
 	private: System::Windows::Forms::Button^ button_open_file_2;
 	private: System::Windows::Forms::TextBox^ textBox2;
 	private: System::Windows::Forms::Button^ button_open_file_1;
-	private: System::Windows::Forms::OpenFileDialog^ openFileDialog2;
-	private: System::Windows::Forms::Label^ label5;
+
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::Label^ label3;
 	private: System::Windows::Forms::Label^ label4;
+	private: System::Windows::Forms::Label^ label5;
+
 	private: System::Windows::Forms::TextBox^ textBox_h_2;
-
 	private: System::Windows::Forms::TextBox^ textBox_w_2;
-
 	private: System::Windows::Forms::TextBox^ textBox_y_2;
-
 	private: System::Windows::Forms::TextBox^ textBox_x_2;
 
 	private: System::Windows::Forms::Label^ label6;
@@ -75,10 +73,7 @@ namespace prog3v3 {
 	private: System::Windows::Forms::Panel^ panel2;
 	private: System::ComponentModel::BackgroundWorker^ backgroundWorker1;
 	private: System::Windows::Forms::ProgressBar^ progressBar1;
-	private: System::Windows::Forms::PictureBox^ pictureBox3;
-
-
-
+	
 
 	private: System::Windows::Forms::MessageBox^ messageBox_error;
 
@@ -162,9 +157,8 @@ namespace prog3v3 {
 			this->tabPage3 = (gcnew System::Windows::Forms::TabPage());
 			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
 			this->tabPage4 = (gcnew System::Windows::Forms::TabPage());
-			this->openFileDialog2 = (gcnew System::Windows::Forms::OpenFileDialog());
-			this->backgroundWorker1 = (gcnew System::ComponentModel::BackgroundWorker());
 			this->pictureBox3 = (gcnew System::Windows::Forms::PictureBox());
+			this->backgroundWorker1 = (gcnew System::ComponentModel::BackgroundWorker());
 			this->tabControl1->SuspendLayout();
 			this->tabPage1->SuspendLayout();
 			this->panel1->SuspendLayout();
@@ -176,10 +170,6 @@ namespace prog3v3 {
 			this->tabPage4->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->BeginInit();
 			this->SuspendLayout();
-			// 
-			// openFileDialog1
-			// 
-			this->openFileDialog1->FileName = L"D:\\GitHub_rep\\foton_prog\\pro_3_v2\\image\\ï_3\\file_1.bmp";
 			// 
 			// tabControl1
 			// 
@@ -244,11 +234,11 @@ namespace prog3v3 {
 			// textBox3
 			// 
 			this->textBox3->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->textBox3->Location = System::Drawing::Point(207, 285);
+			this->textBox3->Location = System::Drawing::Point(35, 285);
 			this->textBox3->Multiline = true;
 			this->textBox3->Name = L"textBox3";
 			this->textBox3->ReadOnly = true;
-			this->textBox3->Size = System::Drawing::Size(329, 245);
+			this->textBox3->Size = System::Drawing::Size(285, 245);
 			this->textBox3->TabIndex = 13;
 			// 
 			// textBox1
@@ -524,10 +514,6 @@ namespace prog3v3 {
 			this->tabPage4->Text = L"tabPage4";
 			this->tabPage4->UseVisualStyleBackColor = true;
 			// 
-			// openFileDialog2
-			// 
-			this->openFileDialog2->FileName = L"D:\\GitHub_rep\\foton_prog\\pro_3_v2\\image\\ï_3\\file_2.bmp";
-			// 
 			// pictureBox3
 			// 
 			this->pictureBox3->Location = System::Drawing::Point(0, 0);
@@ -535,6 +521,11 @@ namespace prog3v3 {
 			this->pictureBox3->Size = System::Drawing::Size(1118, 569);
 			this->pictureBox3->TabIndex = 3;
 			this->pictureBox3->TabStop = false;
+			// 
+			// backgroundWorker1
+			// 
+			this->backgroundWorker1->WorkerReportsProgress = true;
+			this->backgroundWorker1->DoWork += gcnew System::ComponentModel::DoWorkEventHandler(this, &MyForm::backgroundWorker1_DoWork);
 			// 
 			// MyForm
 			// 
@@ -579,11 +570,17 @@ namespace prog3v3 {
 	private: System::Void textBox_w_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
 	private: System::Void textBox_h_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
 
-	public: void setProgressBarValue(int value) {
+	private: System::Void backgroundWorker1_DoWork(System::Object^ sender, System::ComponentModel::DoWorkEventArgs^ e);
+
+	public: System::Void set_value(int value);
+
+	public: System::Void increasing_value(int value);
+
+	public: System::Void setProgressBarValue(int value) {
 		this->progressBar1->Value = value;
 	}
 
-	public: void increasingProgressBarValue(int value) {
+	public: System::Void increasingProgressBarValue(int value) {
 		this->progressBar1->Value += value;
 	}
 
@@ -591,7 +588,11 @@ namespace prog3v3 {
 		return this->progressBar1->Value ;
 	}
 
-	public: void setImage(Drawing::Bitmap^ bitmap) {
+	public: System::Void dataUpdate(System::String^ data) {
+		this->textBox3->Text = data;
+	}
+
+	public: System::Void setImage(Drawing::Bitmap^ bitmap) {
 		this->pictureBox3->Image = bitmap;
 		this->pictureBox3->Refresh();
 	}

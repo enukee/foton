@@ -20,15 +20,14 @@ boolean finding_intersection(BmpFile* img_1, BmpFile* img_2, coordinates* coord_
 	ImageMatrix Bitmap_1(coord_img_1->height, coord_img_1->width);
 	// Записыаем в неё нужный фрагмент
 	Bitmap_1.cut_out(img_1, coord_img_1->y, coord_img_1->x);
-	mb->increasingProgressBarValue(4);
+	mb->increasing_value(4);
 
 	// Создаём матрицу части изображения img_2
 	ImageMatrix Bitmap_2(coord_img_2->height, coord_img_2->width);
 	// Записыаем в неё нужный фрагмент
 	Bitmap_2.cut_out(img_2, coord_img_2->y, coord_img_2->x);
-	mb->increasingProgressBarValue(4);
+	mb->increasing_value(4);
 	
-	//coordinates coordinates;
 	Pixel<double> kof_kor;
 
 	unsigned int Height = Bitmap_1.get_height();
@@ -47,7 +46,7 @@ boolean finding_intersection(BmpFile* img_1, BmpFile* img_2, coordinates* coord_
 
 	for (unsigned int i = 0; i < search_area_h; i++) {
 		value_progressbar += step;
-		mb->setProgressBarValue((int)round(value_progressbar));
+		mb->set_value((int)round(value_progressbar));
 		for (unsigned int j = 0; j < search_area_w; j++) {
 
 			similar = 1;
@@ -80,7 +79,7 @@ exit:
 }
 
 //метод объединения изображений
-void combining(BmpFile* img_1, BmpFile* img_2, coordinates coord_img_1, coordinates coord_img_2, prog3v3::MyForm^ mb) {
+System::Drawing::Bitmap^ combining(BmpFile* img_1, BmpFile* img_2, coordinates coord_img_1, coordinates coord_img_2, prog3v3::MyForm^ mb) {
 	unsigned int img_1_height = img_1->get_height();
 	unsigned int img_1_width = img_1->get_width();
 
@@ -120,14 +119,13 @@ void combining(BmpFile* img_1, BmpFile* img_2, coordinates coord_img_1, coordina
 	ImageMatrix Bitmap(Height, Width);
 
 	Bitmap.recording(img_2, coord_general_image_2.y, coord_general_image_2.x);
-	mb->increasingProgressBarValue(6);
+	mb->increasing_value(6);
 	Bitmap.recording(img_1, coord_general_image_1.y, coord_general_image_1.x);
-	mb->increasingProgressBarValue(6);
+	mb->increasing_value(6);
 
 	System::Drawing::Bitmap^ img = gcnew System::Drawing::Bitmap(Bitmap.get_width(), Bitmap.get_height());
 
 	Pixel<BYTE> pixel;
-	//Color redColor = Color::FromArgb(255, 0, 0);
 	for (int i = 0; i < Bitmap.get_height(); ++i) {
 		for (int j = 0; j < Bitmap.get_width(); ++j) {
 			pixel = Bitmap.get_pixel(i, j);
@@ -135,11 +133,11 @@ void combining(BmpFile* img_1, BmpFile* img_2, coordinates coord_img_1, coordina
 		}
 	}
 
-	mb->setImage(img);
+	//BmpFile img_o(&Bitmap);
+	//img_o.bmp_writer((char*)"D:\\GitHub_rep\\foton\\pro_3_v2\\image\\п_4\\1&2.bmp");
+	mb->increasing_value(8);
 
-	BmpFile img_o(&Bitmap);
-	img_o.bmp_writer((char*)"D:\\GitHub_rep\\foton\\pro_3_v2\\image\\п_4\\1&2.bmp");
-	mb->increasingProgressBarValue(8);
+	return img;
 }
 
 Pixel<BYTE> color_correction(Pixel<double> pixel, Pixel<double>sco, Pixel<double>mo) {
@@ -153,21 +151,21 @@ Pixel<BYTE> color_correction(Pixel<double> pixel, Pixel<double>sco, Pixel<double
 }
 
 // метод корректирования яркости
-System::String^ brightness_correction(BmpFile* img_1, BmpFile* img_2, coordinates coord_img_1, coordinates coord_img_2, prog3v3::MyForm^ mb) {
+System::String^ brightness_correction(BmpFile* img_1, BmpFile* img_2, coordinates coord_img_1, coordinates coord_img_2, prog3v3::MyForm^ form) {
 
 	// создание матрицы части пересечеия первого изображения
 	ImageMatrix Bitmap_1(coord_img_1.height, coord_img_1.width);
 
 	// заполнения первой матрицы 
 	Bitmap_1.cut_out(img_1, coord_img_1.y, coord_img_1.x);
-	mb->increasingProgressBarValue(4);
+	form->increasing_value(4);
 
 	// создание матрицы части пересечеия второго изображения
 	ImageMatrix Bitmap_2(coord_img_2.height, coord_img_2.width);
 
 	// заполнения второй матрицы 
 	Bitmap_2.cut_out(img_2, coord_img_2.y, coord_img_2.x);
-	mb->increasingProgressBarValue(4);
+	form->increasing_value(4);
 
 	Pixel<double> sco_1 = Bitmap_1.sd();
 	Pixel<double> sco_2 = Bitmap_2.sd();
@@ -226,12 +224,12 @@ System::String^ brightness_correction(BmpFile* img_1, BmpFile* img_2, coordinate
 	unsigned int height = img_2->get_height();
 	unsigned int width = img_2->get_width();
 
-	double value_progressbar = mb->getProgressBarValue();
+	double value_progressbar = form->getProgressBarValue();
 	double step = (double)12 / (double)height;
 
 	for (unsigned int i = 0; i < height; i++) {
 		value_progressbar += step;
-		mb->setProgressBarValue((int)round(value_progressbar));
+		form->set_value((int)round(value_progressbar));
 
 		for (unsigned int j = 0; j < width; j++) {
 			byte = img_2->get_pixel(i, j);

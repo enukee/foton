@@ -1,6 +1,6 @@
 ﻿  MyForm.cpp
 D:\GitHub_rep\foton\prog_3_v3\prog_3_v3\processing.h(9,35): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-D:\GitHub_rep\foton\prog_3_v3\prog_3_v3\processing.h(131,20): warning C4018: <: несоответствие типов со знаком и без знака
-D:\GitHub_rep\foton\prog_3_v3\prog_3_v3\processing.h(132,21): warning C4018: <: несоответствие типов со знаком и без знака
+D:\GitHub_rep\foton\prog_3_v3\prog_3_v3\processing.h(129,20): warning C4018: <: несоответствие типов со знаком и без знака
+D:\GitHub_rep\foton\prog_3_v3\prog_3_v3\processing.h(130,21): warning C4018: <: несоответствие типов со знаком и без знака
   BmpFile.obj : обнаружен модуль MSIL; для MSIL последовательная компоновка отключена; выполняется полная компоновка
   prog_3_v3.vcxproj -> D:\GitHub_rep\foton\prog_3_v3\x64\Debug\prog_3_v3.exe

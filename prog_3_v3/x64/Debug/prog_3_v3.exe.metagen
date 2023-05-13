@@ -18,7 +18,10 @@ Class prog3v3.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
+    set_value(Int32): PrivateScope, Public, HideBySig
+    increasing_value(Int32): PrivateScope, Public, HideBySig
     setProgressBarValue(Int32): PrivateScope, Public, HideBySig
     increasingProgressBarValue(Int32): PrivateScope, Public, HideBySig
     getProgressBarValue(): PrivateScope, Public, HideBySig
+    dataUpdate(String): PrivateScope, Public, HideBySig
     setImage(Bitmap): PrivateScope, Public, HideBySig
