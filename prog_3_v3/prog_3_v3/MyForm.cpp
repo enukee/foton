@@ -54,42 +54,34 @@ System::Void MyForm::textBox_x_1_Validating(System::Object^ sender, System::Comp
 	catch (...) {
 		this->messageBox_error->Show("Откройте файл", "Ошибка");
 	}
-	x_1 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::textBox_y_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 	checking_the_value(sender, this->pictureBox1->Image->Height);
-	y_1 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::textBox_w_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 	checking_the_value(sender, this->pictureBox1->Image->Width - Int32::Parse(this->textBox_x_1->Text));
-	w_1 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::textBox_h_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 	checking_the_value(sender, this->pictureBox1->Image->Height - Int32::Parse(this->textBox_y_1->Text));
-	h_1 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::textBox_x_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 	checking_the_value(sender, this->pictureBox2->Image->Width);
-	x_2 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::textBox_y_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 	checking_the_value(sender, this->pictureBox2->Image->Height);
-	y_2 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::textBox_w_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 	checking_the_value(sender, this->pictureBox2->Image->Width - Int32::Parse(this->textBox_x_2->Text));
-	w_2 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::textBox_h_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 	checking_the_value(sender, this->pictureBox2->Image->Height - Int32::Parse(this->textBox_y_2->Text));
-	h_2 = Int32::Parse(this->textBox_x_1->Text);
 }
 
 System::Void MyForm::pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
@@ -164,7 +156,6 @@ System::Void MyForm::button_processing_Click(System::Object^ sender, System::Eve
 }
 
 System::Void MyForm::backgroundWorker1_DoWork(System::Object^ sender, System::ComponentModel::DoWorkEventArgs^ e) {
-
 	this->set_value(0);
 
 	BmpFile img_1(way_1, this);
