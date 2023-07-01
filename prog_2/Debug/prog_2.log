@@ -1,3 +1,0 @@
-﻿  prog_2.cpp
-C:\Users\vi\Desktop\фотон\prog_2\prog_2.cpp(52,9): warning C4244: return: преобразование "double" в "float", возможна потеря данных
-  prog_2.vcxproj -> C:\Users\vi\Desktop\фотон\prog_2\Debug\prog_2.exe
