@@ -139,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BmpFile.h" />
+    <ClInclude Include="check.h" />
     <ClInclude Include="correlation.h" />
     <ClInclude Include="ImageMatrix.h" />
     <ClInclude Include="MyForm.h">

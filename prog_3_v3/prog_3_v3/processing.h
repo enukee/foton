@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <thread>
 #include "BmpFile.h"
 #include "correlation.h"
 
@@ -14,54 +15,34 @@ boolean is_bmp_file(char* way) {
 	return is_bmp;
 }
 
-// метод поиска пересечения 2х изображений (поиск img_2 в img_1)
-boolean finding_intersection(BmpFile* img_1, BmpFile* img_2, coordinates* coord_img_1, coordinates* coord_img_2, prog3v3::MyForm^ mb) {
-	// Создаём матрицу части изображения img_1
-	ImageMatrix Bitmap_1(coord_img_1->height, coord_img_1->width);
-	// Записыаем в неё нужный фрагмент
-	Bitmap_1.cut_out(img_1, coord_img_1->y, coord_img_1->x);
-	mb->increasing_value(4);
-
-	// Создаём матрицу части изображения img_2
-	ImageMatrix Bitmap_2(coord_img_2->height, coord_img_2->width);
-	// Записыаем в неё нужный фрагмент
-	Bitmap_2.cut_out(img_2, coord_img_2->y, coord_img_2->x);
-	mb->increasing_value(4);
-	
-	Pixel<double> kof_kor;
-
-	unsigned int Height = Bitmap_1.get_height();
-	unsigned int Width = Bitmap_1.get_width();
-
-	unsigned int search_area_h = Bitmap_2.get_height() - Height + 1;
-	unsigned int search_area_w = Bitmap_2.get_width() - Width + 1;
+void search_inside_img(boolean* similar, ImageMatrix* Bitmap_1, ImageMatrix* Bitmap_2, unsigned int a, unsigned int b, coordinates* coord_img_2) {
+	unsigned int Height = (*Bitmap_1).get_height();
+	unsigned int Width = (*Bitmap_1).get_width();
 
 	Pixel<BYTE>* Bitmap_im_1 = new Pixel<BYTE>[Width];
 	Pixel<BYTE>* Bitmap_im_2 = new Pixel<BYTE>[Width];
 
-	// флаг не совпадения фрагментов
-	boolean similar;
-	double value_progressbar = mb->getProgressBarValue();
-	double step = (double)12 / (double)search_area_h;
+	unsigned int search_area_w = (*Bitmap_2).get_width() - Width + 1;
+	
+	// структура хранения значений коэффициента корреляции для каждого канала
+	Pixel<double> kof_kor;
 
-	for (unsigned int i = 0; i < search_area_h; i++) {
-		value_progressbar += step;
-		mb->set_value((int)round(value_progressbar));
+	for (unsigned int i = a; i < b; i++) {
 		for (unsigned int j = 0; j < search_area_w; j++) {
 
-			similar = 1;
+			*similar = 1;
 			for (unsigned int t = 0; t < Height; t++) {
 
-				Bitmap_2.get_row_matrix(Bitmap_im_2, i, j, Width);
-				Bitmap_1.get_row_matrix(Bitmap_im_1, t);
+				(*Bitmap_2).get_row_matrix(Bitmap_im_2, i, j, Width);
+				(*Bitmap_1).get_row_matrix(Bitmap_im_1, t);
 				kof_kor = kcor(Bitmap_im_1, Bitmap_im_2, Width);
 				if (!((kof_kor.canal_R > 0.99) &&
 					(kof_kor.canal_G > 0.99) &&
 					(kof_kor.canal_B > 0.99)))
-					similar = 0;
-					break;
+					*similar = 0;
+				break;
 			}
-			if (similar) {
+			if (*similar) {
 				coord_img_2->x = j;
 				coord_img_2->y = i;
 
@@ -75,7 +56,45 @@ exit:
 	delete[] Bitmap_im_1;
 	delete[] Bitmap_im_2;
 
-	return similar;
+	//return similar;
+}
+
+// метод поиска пересечения 2х изображений (поиск img_2 в img_1)
+boolean finding_intersection(BmpFile* img_1, BmpFile* img_2, coordinates* coord_img_1, coordinates* coord_img_2, prog3v3::MyForm^ mb) {
+	// Создаём матрицу части изображения img_1
+	ImageMatrix Bitmap_1(coord_img_1->height, coord_img_1->width);
+	// Записываем в неё нужный фрагмент
+	Bitmap_1.cut_out(img_1, coord_img_1->y, coord_img_1->x);
+	mb->increasing_value(4);
+
+	// Создаём матрицу части изображения img_2
+	ImageMatrix Bitmap_2(coord_img_2->height, coord_img_2->width);
+	// Записываем в неё нужный фрагмент
+	Bitmap_2.cut_out(img_2, coord_img_2->y, coord_img_2->x);
+	mb->increasing_value(4);
+	
+	boolean* similar1;
+	*similar1 = 0;
+
+	boolean* similar2;
+	*similar2 = 0;
+
+	unsigned int Height = Bitmap_1.get_height();
+	unsigned int Width = Bitmap_1.get_width();
+
+	unsigned int search_area_h = Bitmap_2.get_height() - Height + 1;
+	/*unsigned int search_area_w = Bitmap_2.get_width() - Width + 1;*/
+
+	ImageMatrix* bm1 = &Bitmap_1;
+	ImageMatrix* bm2 = &Bitmap_2;
+
+	std::thread tA(search_inside_img, std::ref(similar1), std::ref(bm1), std::ref(bm2), 0, search_area_h / 2,  std::ref(coord_img_2));
+	std::thread tB(search_inside_img, std::ref(similar2), std::ref(bm1), std::ref(bm2), search_area_h / 2, search_area_h, std::ref(coord_img_2));
+
+	tA.join();
+	tB.join();
+
+	return (*similar1) | (*similar2);
 }
 
 //метод объединения изображений
@@ -133,6 +152,7 @@ System::Drawing::Bitmap^ combining(BmpFile* img_1, BmpFile* img_2, coordinates c
 		}
 	}
 
+	// это перенести в другое место
 	//BmpFile img_o(&Bitmap);
 	//img_o.bmp_writer((char*)"D:\\GitHub_rep\\foton\\pro_3_v2\\image\\п_4\\1&2.bmp");
 	mb->increasing_value(8);
@@ -140,6 +160,7 @@ System::Drawing::Bitmap^ combining(BmpFile* img_1, BmpFile* img_2, coordinates c
 	return img;
 }
 
+// коррекция пикселя
 Pixel<BYTE> color_correction(Pixel<double> pixel, Pixel<double>sco, Pixel<double>mo) {
 	Pixel<double> value;
 	value = pixel * sco + mo;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                

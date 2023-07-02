@@ -1,18 +1,9 @@
 #include "MyForm.h"
 #include "processing.h"
+#include "check.h"
 
 using namespace prog3v3;
 using namespace System::Runtime::InteropServices;
-
-void checking_the_value(System::Object^ sender, int max) {
-	int value = Int32::Parse((safe_cast<TextBox^>(sender))->Text);
-	if (value < 0) {
-		(safe_cast<TextBox^>(sender))->Text = "0";
-	}
-	if (value >= max) {
-		(safe_cast<TextBox^>(sender))->Text = System::Convert::ToString(max);
-	}
-}
 
 // Открытие bmp файла 1
 System::Void MyForm::button_open_file_1_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -47,41 +38,106 @@ System::Void MyForm::button_open_file_2_Click(System::Object^ sender, System::Ev
 	}
 }
 
+// валидатор для поля ввода координаты x на изображении 1
 System::Void MyForm::textBox_x_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
-	try {
-		checking_the_value(sender, this->pictureBox1->Image->Width);
+	if (this->pictureBox1->Image != nullptr)
+	{
+		if (is_integer(sender))
+			checking_the_value(sender, this->pictureBox1->Image->Width);
+		else
+		{
+			this->textBox_x_1->Text = "0";
+			this->messageBox_error->Show("Введёное значения не является числом", "Ошибка");
+		}
 	}
-	catch (...) {
+	else
+	{
 		this->messageBox_error->Show("Откройте файл", "Ошибка");
 	}
 }
 
+// валидатор для поля ввода координаты y на изображении 1
 System::Void MyForm::textBox_y_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
-	checking_the_value(sender, this->pictureBox1->Image->Height);
+	if (this->pictureBox1->Image != nullptr)
+	{
+		checking_the_value(sender, this->pictureBox1->Image->Height);
+	}
+	else
+	{
+		this->messageBox_error->Show("Откройте файл", "Ошибка");
+	}
 }
 
+// валидатор для поля ввода размера по x на изображении 1
 System::Void MyForm::textBox_w_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
-	checking_the_value(sender, this->pictureBox1->Image->Width - Int32::Parse(this->textBox_x_1->Text));
+	if (this->pictureBox1->Image != nullptr)
+	{
+		checking_the_value(sender, this->pictureBox1->Image->Width - Int32::Parse(this->textBox_x_1->Text));
+	}
+	else
+	{
+		this->messageBox_error->Show("Откройте файл", "Ошибка");
+	}
 }
 
+// валидатор для поля ввода размера по y на изображении 1
 System::Void MyForm::textBox_h_1_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
-	checking_the_value(sender, this->pictureBox1->Image->Height - Int32::Parse(this->textBox_y_1->Text));
+	if (this->pictureBox1->Image != nullptr)
+	{
+		checking_the_value(sender, this->pictureBox1->Image->Height - Int32::Parse(this->textBox_y_1->Text));
+	}
+	else
+	{
+		this->messageBox_error->Show("Откройте файл", "Ошибка");
+	}
 }
 
+// валидатор для поля ввода координаты x на изображении 2
 System::Void MyForm::textBox_x_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
-	checking_the_value(sender, this->pictureBox2->Image->Width);
+	if (this->pictureBox2->Image != nullptr)
+	{
+		checking_the_value(sender, this->pictureBox2->Image->Width);
+	}
+	else
+	{
+		this->messageBox_error->Show("Откройте файл", "Ошибка");
+	}
 }
 
+// валидатор для поля ввода координаты y на изображении 2
 System::Void MyForm::textBox_y_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
-	checking_the_value(sender, this->pictureBox2->Image->Height);
+	if (this->pictureBox2->Image != nullptr)
+	{
+		checking_the_value(sender, this->pictureBox2->Image->Height);
+	}
+	else
+	{
+		this->messageBox_error->Show("Откройте файл", "Ошибка");
+	}
 }
 
+// валидатор для поля ввода размера по x на изображении 2
 System::Void MyForm::textBox_w_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
-	checking_the_value(sender, this->pictureBox2->Image->Width - Int32::Parse(this->textBox_x_2->Text));
+	if (this->pictureBox2->Image != nullptr)
+	{
+		checking_the_value(sender, this->pictureBox2->Image->Width - Int32::Parse(this->textBox_x_2->Text));
+	}
+	else
+	{
+		this->messageBox_error->Show("Откройте файл", "Ошибка");
+	}
 }
 
+// валидатор для поля ввода размера по y на изображении 2
 System::Void MyForm::textBox_h_2_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
-	checking_the_value(sender, this->pictureBox2->Image->Height - Int32::Parse(this->textBox_y_2->Text));
+	if (this->pictureBox2->Image != nullptr)
+	{
+		checking_the_value(sender, this->pictureBox2->Image->Height - Int32::Parse(this->textBox_y_2->Text));
+	}
+	else
+	{
+		this->messageBox_error->Show("Откройте файл", "Ошибка");
+	}
 }
 
 System::Void MyForm::pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
